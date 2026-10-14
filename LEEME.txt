@@ -1,0 +1,20 @@
+IMPRIMIR EN BIXOLON - Versión instalable y sin internet
+
+1. Sube estos 5 archivos (index.html, manifest.webmanifest, sw.js,
+   icon-192.png, icon-512.png) a un sitio HTTPS, por ejemplo GitHub Pages:
+   - Crea un repositorio en github.com y sube los archivos.
+   - Settings > Pages > Branch: main > Save.
+   - Te da un enlace tipo https://usuario.github.io/bixolon/
+
+2. En cada teléfono, abre ese enlace en Chrome (versión 137 o más reciente)
+   con internet, una sola vez.
+
+3. Menú de Chrome (⋮) > "Instalar app" o "Agregar a pantalla principal".
+
+4. Listo: el ícono "Bixolon" abre la app aunque no haya internet.
+   También aparece en el menú "Compartir" de la galería: compartes
+   una foto y se abre lista para imprimir.
+
+Para actualizar la app: sube los archivos nuevos y cambia
+VERSION = 'bixolon-v1' en sw.js por 'bixolon-v2' (y así sucesivamente).
+Los teléfonos toman la versión nueva la próxima vez que abran la app con internet.
