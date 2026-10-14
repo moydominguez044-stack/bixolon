@@ -267,28 +267,42 @@ async function openPort(p) {
   return true;
 }
 
+let searchLevel = 0; // 0: solo impresoras (puerto serie), 1: todos los emparejados
+function diag() {
+  const ua = navigator.userAgent;
+  const c = (ua.match(/Chrome\/(\d+)/) || [])[1] || '?', a = (ua.match(/Android ([\d.]+)/) || [])[1] || '?';
+  return `Chrome ${c}, Android ${a}`;
+}
 async function connect() {
   if (!('serial' in navigator)) {
-    msg('Este navegador no puede usar impresoras Bluetooth. Abre esta página en Google Chrome para Android, versión 137 o más reciente.');
+    msg('Este navegador no puede usar impresoras Bluetooth. Abre esta página en Google Chrome para Android, versión 137 o más reciente. (' + diag() + ')');
     return;
   }
   await disconnect(true);
+  const opts = searchLevel === 0
+    ? { filters: [{ bluetoothServiceClassId: SPP }], allowedBluetoothServiceClassIds: [SPP] }
+    : { allowedBluetoothServiceClassIds: [SPP] };
+  const t0 = Date.now();
   try {
-    const p = await navigator.serial.requestPort({
-      filters: [{ bluetoothServiceClassId: SPP }],
-      allowedBluetoothServiceClassIds: [SPP]
-    });
+    const p = await navigator.serial.requestPort(opts);
     await openPort(p);
   } catch (e) {
-    log('Selección: ' + e.name + ' ' + e.message);
-    if (e.name === 'NotFoundError') {
-      msg('No se eligió ninguna impresora. Si no aparece en la lista, emparéjala primero en Ajustes > Bluetooth del teléfono (la clave suele ser 0000).');
-    } else if (e.name === 'SecurityError') {
-      msg('El navegador bloqueó el acceso a Bluetooth en esta vista. Abre el enlace directamente en Chrome, no dentro de otra app.');
-    } else {
-      msg('No se pudo buscar impresoras: ' + e.message);
-    }
+    const fast = Date.now() - t0 < 1500;   // la lista ni siquiera llegó a mostrarse
+    log(`Búsqueda ${searchLevel ? 'amplia' : 'normal'}: ${e.name} ${e.message} (${diag()})`);
     setConn('off', 'Sin impresora', 'Toca Conectar para elegirla.');
+    if (e.name === 'NotFoundError' && fast && searchLevel === 0) {
+      searchLevel = 1;
+      $('#btnConn').textContent = 'Buscar todas';
+      msg('Chrome no mostró ninguna impresora con la búsqueda normal. Toca "Buscar todas" para ver todos los dispositivos emparejados.');
+    } else if (e.name === 'NotFoundError' && fast) {
+      msg('Chrome no encontró dispositivos Bluetooth. Ve a Ajustes > Apps > Chrome > Permisos > Dispositivos cercanos y elige Permitir. Después cierra Chrome por completo y vuelve a abrir la app. (' + diag() + ')');
+    } else if (e.name === 'NotFoundError') {
+      msg('No se eligió ninguna impresora. Si no aparece en la lista, emparéjala primero en Ajustes > Bluetooth del teléfono (la clave suele ser 0000).');
+    } else if (e.name === 'SecurityError' || e.name === 'NotAllowedError') {
+      msg('Chrome no tiene permiso para usar Bluetooth. Ve a Ajustes > Apps > Chrome > Permisos > Dispositivos cercanos y elige Permitir. Si abriste el enlace dentro de otra app, ábrelo directo en Chrome. (' + diag() + ')');
+    } else {
+      msg('No se pudo buscar impresoras: ' + e.name + ' ' + e.message + ' (' + diag() + ')');
+    }
   }
 }
 
