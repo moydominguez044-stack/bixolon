@@ -167,6 +167,10 @@ summary{font-weight:700;cursor:pointer;min-height:44px;display:flex;align-items:
       <label for="contrast">Contraste <output id="oContr"></output></label>
       <input type="range" id="contrast" min="-50" max="50" step="1">
     </div>
+    <div class="field">
+      <label for="sharpen">Nitidez <output id="oSharp"></output></label>
+      <input type="range" id="sharpen" min="0" max="100" step="5">
+    </div>
     <div class="field row">
       <button class="btn ghost" id="btnRot">Girar 90°</button>
       <label class="check"><input type="checkbox" id="invert"> Invertir colores</label>
@@ -220,7 +224,7 @@ const $ = s => document.querySelector(s);
 const SPP = '00001101-0000-1000-8000-00805f9b34fb';
 const DOTS = { '58': 384, '80': 576, '112': 832 };
 const SPEED = { fast: [1024, 0], normal: [512, 15], slow: [128, 40] };
-const DEF = { paper:'58', method:'fs', brightness:10, contrast:10, rotate:0, invert:false, copies:1, mode:'gsv0', speed:'normal', feed:4, cut:false };
+const DEF = { paper:'58', method:'fs', brightness:10, contrast:10, sharpen:60, rotate:0, invert:false, copies:1, mode:'gsv0', speed:'normal', feed:4, cut:false };
 const KEY = 'bixolon-print-v1';
 
 let S = Object.assign({}, DEF);
@@ -355,24 +359,72 @@ function rasterize(src, width) {
   const side = r % 180 ? sh : sw, other = r % 180 ? sw : sh;
   const scale = W / side;
   const H = Math.max(1, Math.min(30000, Math.round(other * scale)));
+  const tw = Math.max(1, Math.round(sw * scale)), th = Math.max(1, Math.round(sh * scale));
+  const pre = prescale(src, sw, sh, tw, th);
   const c = document.createElement('canvas'); c.width = W; c.height = H;
   const g = c.getContext('2d', { willReadFrequently: true });
   g.fillStyle = '#fff'; g.fillRect(0, 0, W, H);           // fondo blanco: evita que lo transparente salga negro
-  g.imageSmoothingQuality = 'high';
+  g.imageSmoothingEnabled = true; g.imageSmoothingQuality = 'high';
   g.translate(W / 2, H / 2); g.rotate(r * Math.PI / 180);
-  g.drawImage(src, -sw * scale / 2, -sh * scale / 2, sw * scale, sh * scale);
+  g.drawImage(pre, -tw / 2, -th / 2, tw, th);
   return toBits(g.getImageData(0, 0, W, H).data, W, H);
+}
+
+// Reduce la foto a la mitad varias veces antes del tamaño final: una sola reducción grande deja la imagen borrosa.
+function prescale(src, sw, sh, tw, th) {
+  const key = tw + 'x' + th;
+  if (src._pre && src._pre.key === key) return src._pre.canvas;
+  let img = src, cw = sw, ch = sh;
+  while (cw / 2 >= tw * 1.5 && ch / 2 >= th * 1.5) {
+    const nw = Math.round(cw / 2), nh = Math.round(ch / 2);
+    const t = document.createElement('canvas'); t.width = nw; t.height = nh;
+    const tg = t.getContext('2d'); tg.imageSmoothingEnabled = true; tg.imageSmoothingQuality = 'high';
+    tg.drawImage(img, 0, 0, nw, nh);
+    img = t; cw = nw; ch = nh;
+  }
+  try { src._pre = { key, canvas: img }; } catch (e) {}
+  return img;
+}
+
+// Desenfoque suave (1-2-1) usado para dar nitidez con máscara de enfoque.
+function blur121(a, W, H) {
+  const t = new Float32Array(a.length), o = new Float32Array(a.length);
+  for (let y = 0; y < H; y++) {
+    const r = y * W;
+    for (let x = 0; x < W; x++) {
+      const l = a[r + (x > 0 ? x - 1 : x)], c = a[r + x], d = a[r + (x < W - 1 ? x + 1 : x)];
+      t[r + x] = (l + 2 * c + d) / 4;
+    }
+  }
+  for (let y = 0; y < H; y++) {
+    const u = (y > 0 ? y - 1 : y) * W, c = y * W, d = (y < H - 1 ? y + 1 : y) * W;
+    for (let x = 0; x < W; x++) o[c + x] = (t[u + x] + 2 * t[c + x] + t[d + x]) / 4;
+  }
+  return o;
 }
 
 function toBits(d, W, H) {
   const N = W * H, gray = new Float32Array(N);
-  const cc = S.contrast * 2.55, f = (259 * (cc + 255)) / (255 * (259 - cc)), b = S.brightness * 2.55;
   for (let i = 0, j = 0; i < N; i++, j += 4) {
     let v = 0.299 * d[j] + 0.587 * d[j + 1] + 0.114 * d[j + 2];
     if (d[j + 3] < 255) v = 255 - (255 - v) * d[j + 3] / 255;
-    v = f * (v - 128) + 128 + b;
+    gray[i] = v;
+  }
+  // Nitidez: realza bordes y detalles antes de pasar a puntos blanco y negro
+  const amt = (S.sharpen || 0) / 100 * 1.8;
+  if (amt > 0) {
+    const bl = blur121(gray, W, H);
+    for (let i = 0; i < N; i++) gray[i] += amt * (gray[i] - bl[i]);
+  }
+  // El papel térmico oscurece los tonos medios; la corrección gamma los aclara para que la foto no salga empastada
+  const cc = S.contrast * 2.55, f = (259 * (cc + 255)) / (255 * (259 - cc)), b = S.brightness * 2.55;
+  const gam = S.method === 'th' ? 1 : 1 / 1.2;
+  for (let i = 0; i < N; i++) {
+    let v = f * (gray[i] - 128) + 128 + b;
+    v = v < 0 ? 0 : v > 255 ? 255 : v;
+    if (gam !== 1) v = 255 * Math.pow(v / 255, gam);
     if (S.invert) v = 255 - v;
-    gray[i] = v < 0 ? 0 : v > 255 ? 255 : v;
+    gray[i] = v;
   }
   const bits = new Uint8Array(N);
   const add = (x, y, e) => { if (x >= 0 && x < W && y < H) gray[y * W + x] += e; };
@@ -537,9 +589,9 @@ function printTest() {
   const grad = g.createLinearGradient(14, 0, W - 14, 0); grad.addColorStop(0, '#000'); grad.addColorStop(1, '#fff');
   g.fillStyle = grad; g.fillRect(14, 130, W - 28, 60);
   g.fillStyle = '#000'; g.fillRect(0, H - 4, W, 4);
-  const saved = Object.assign({}, S); Object.assign(S, { rotate: 0, invert: false, method: 'fs', brightness: 0, contrast: 0 });
+  const saved = Object.assign({}, S); Object.assign(S, { rotate: 0, invert: false, method: 'fs', brightness: 0, contrast: 0, sharpen: 0 });
   const R = toBits(g.getImageData(0, 0, W, H).data, W, H);
-  Object.assign(S, { rotate: saved.rotate, invert: saved.invert, method: saved.method, brightness: saved.brightness, contrast: saved.contrast });
+  Object.assign(S, saved);
   const txt = new TextEncoder().encode('Texto OK. Si no sale el cuadro de abajo,\ncambie a modo compatible.\n\n');
   run([() => job(R, txt)], 'Página de prueba');
 }
@@ -554,13 +606,14 @@ function bind() {
     $('#oBright').textContent = (S.brightness > 0 ? '+' : '') + S.brightness;
     $('#oContr').textContent = (S.contrast > 0 ? '+' : '') + S.contrast;
     $('#oFeed').textContent = S.feed + ' líneas';
+    $('#oSharp').textContent = S.sharpen + '%';
     $('#cVal').textContent = S.copies;
   };
   [['method', 'value'], ['mode', 'value'], ['speed', 'value']].forEach(([id]) => {
     const el = $('#' + id); el.value = S[id];
     el.onchange = () => { S[id] = el.value; save(); if (id === 'method') preview(); };
   });
-  ['brightness', 'contrast', 'feed'].forEach(id => {
+  ['brightness', 'contrast', 'sharpen', 'feed'].forEach(id => {
     const el = $('#' + id); el.value = S[id];
     el.oninput = () => { S[id] = +el.value; save(); sync(); if (id !== 'feed') preview(); };
   });
