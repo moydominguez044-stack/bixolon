@@ -1,5 +1,5 @@
 // Cambia este número cada vez que subas una versión nueva de la app.
-const VERSION = 'bixolon-v2';
+const VERSION = 'bixolon-v3';
 const ARCHIVOS = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png'];
 const abs = p => new URL(p, self.registration.scope).href;
 
@@ -10,7 +10,7 @@ self.addEventListener('install', e => {
 
 self.addEventListener('activate', e => {
   e.waitUntil(caches.keys().then(ks => Promise.all(
-    ks.filter(k => k !== VERSION && k !== 'compartidas').map(k => caches.delete(k))
+    ks.filter(k => k.startsWith('bixolon-') && k !== VERSION).map(k => caches.delete(k))
   )));
   self.clients.claim();
 });
