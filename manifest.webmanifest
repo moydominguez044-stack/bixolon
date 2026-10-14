@@ -1,22 +1,41 @@
 {
-  "name": "Imprimir en Bixolon",
-  "short_name": "Bixolon",
-  "description": "Imprime fotos e imágenes en impresoras Bixolon por Bluetooth.",
+  "name": "Imprimir Amigos",
+  "short_name": "Imprimir",
+  "description": "Imprime fotos en las impresoras Bixolon por Bluetooth.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#E8ECF0",
-  "theme_color": "#0E6BA8",
+  "background_color": "#F5EDEC",
+  "theme_color": "#0A2240",
   "lang": "es",
   "icons": [
-    { "src": "./icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
-    { "src": "./icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+    {
+      "src": "./icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
   ],
   "share_target": {
     "action": "./compartir",
     "method": "POST",
     "enctype": "multipart/form-data",
-    "params": { "files": [ { "name": "imagenes", "accept": ["image/*"] } ] }
+    "params": {
+      "files": [
+        {
+          "name": "imagenes",
+          "accept": [
+            "image/*"
+          ]
+        }
+      ]
+    }
   }
 }

@@ -3,16 +3,19 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Imprimir en Bixolon</title>
+<title>Imprimir | Amigos for Christ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@500;600;700;800&display=swap" rel="stylesheet">
 <link rel="manifest" href="./manifest.webmanifest">
-<meta name="theme-color" content="#0E6BA8">
+<meta name="theme-color" content="#0A2240">
 <link rel="icon" href="./icon-192.png">
 <link rel="apple-touch-icon" href="./icon-192.png">
 <style>
 :root{
-  --bg:#E8ECF0; --surface:#FFFFFF; --ink:#15202B; --muted:#55616E; --line:#CBD3DB;
-  --accent:#0E6BA8; --accent-ink:#FFFFFF; --ok:#17784A; --err:#B3261E; --warn:#8A5A00;
-  --paper:#FFFFFF; --track:#D5DCE3;
+  --navy:#0A2240; --blue:#00758F; --hi:#96D1DE;
+  --bg:#F5EDEC; --surface:#FFFFFF; --line:#E3E0E7; --text:#414042; --text2:#414042;
+  --btn:#00758F; --btn-ink:#FFFFFF; --ok:#00758F; --err:#B3261E; --track:#E3E0E7;
   color-scheme:light;
   box-sizing:border-box;
   padding-top:env(safe-area-inset-top,0px);
@@ -20,193 +23,136 @@
 }
 @media (prefers-color-scheme:dark){
   :root:not([data-theme="light"]){
-    --bg:#0E1620; --surface:#17222E; --ink:#E5EAF0; --muted:#98A5B3; --line:#2A3846;
-    --accent:#4FA6E2; --accent-ink:#08151F; --ok:#4CC38A; --err:#F2766B; --warn:#E3AE52;
-    --paper:#F5F7F9; --track:#2A3846; color-scheme:dark;
+    --bg:#06182E; --surface:#0A2240; --line:#1C3A5E; --text:#F5EDEC; --text2:#96D1DE;
+    --ok:#96D1DE; --err:#FF9A8F; --track:#1C3A5E; color-scheme:dark;
   }
 }
 :root[data-theme="dark"]{
-  --bg:#0E1620; --surface:#17222E; --ink:#E5EAF0; --muted:#98A5B3; --line:#2A3846;
-  --accent:#4FA6E2; --accent-ink:#08151F; --ok:#4CC38A; --err:#F2766B; --warn:#E3AE52;
-  --paper:#F5F7F9; --track:#2A3846; color-scheme:dark;
+  --bg:#06182E; --surface:#0A2240; --line:#1C3A5E; --text:#F5EDEC; --text2:#96D1DE;
+  --ok:#96D1DE; --err:#FF9A8F; --track:#1C3A5E; color-scheme:dark;
 }
-html{scroll-padding-top:env(safe-area-inset-top,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px);height:100%}
 *,*::before,*::after{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);
-  font-family:"Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
-  font-size:17px;line-height:1.45;-webkit-text-size-adjust:100%}
-main{max-width:560px;margin:0 auto;padding:16px 16px 140px}
-h1{font-size:1.5rem;line-height:1.15;margin:4px 0 2px;letter-spacing:-.01em}
-h2{font-size:1.05rem;margin:0 0 10px}
-p{margin:0}
-.muted{color:var(--muted);font-size:.92rem}
-section{margin-top:22px}
-button,select,input{font:inherit;color:inherit}
+[hidden]{display:none!important}
+body{margin:0;min-height:100%;background:var(--bg);color:var(--text);
+  font-family:"Raleway","Avenir Next",Avenir,"Proxima Nova",system-ui,sans-serif;
+  font-weight:500;font-size:17px;line-height:1.45;-webkit-text-size-adjust:100%}
+button,select{font:inherit;color:inherit}
 button{cursor:pointer}
-:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
 
-/* Conexión */
-.conn{display:flex;align-items:center;gap:12px;margin-top:14px;padding:12px 14px;
-  background:var(--surface);border:1px solid var(--line);border-radius:14px}
-.dot{width:12px;height:12px;border-radius:50%;background:var(--muted);flex:none}
-.conn[data-s="ok"] .dot{background:var(--ok)}
-.conn[data-s="busy"] .dot{background:var(--warn)}
-.conn .txt{flex:1;min-width:0}
-.conn .txt strong{display:block}
-.btn{border:0;border-radius:10px;padding:11px 16px;font-weight:700;background:var(--accent);color:var(--accent-ink);min-height:44px}
-.btn.ghost{background:transparent;color:var(--accent);border:1.5px solid var(--accent)}
-.btn.plain{background:transparent;color:var(--muted);padding:8px 10px;min-height:0;font-weight:400;text-decoration:underline}
-.btn:disabled{opacity:.45;cursor:not-allowed}
+/* Encabezado de marca */
+header{background:var(--navy);color:#fff;padding:18px 20px 16px}
+header .in{max-width:520px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px}
+header img{height:44px;width:auto;display:block}
+.chip{display:flex;align-items:center;gap:8px;font-size:.85rem;font-weight:600;color:var(--hi);white-space:nowrap}
+.chip i{width:10px;height:10px;border-radius:50%;background:#6D6E71;display:block}
+.chip[data-s="ok"] i{background:var(--hi);box-shadow:0 0 0 4px rgba(150,209,222,.25)}
+.chip[data-s="busy"] i{background:#fff}
 
-.msg{margin-top:10px;padding:10px 12px;border-radius:10px;font-size:.95rem;border-left:4px solid var(--err);background:var(--surface)}
+main{max-width:520px;margin:0 auto;padding:22px 20px 150px}
+h1{font-weight:800;font-size:1.65rem;line-height:1.15;margin:0;color:var(--navy);letter-spacing:-.01em}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) h1{color:#fff}}
+:root[data-theme="dark"] h1{color:#fff}
+.sub{margin:6px 0 0;color:var(--text2)}
+
+/* Elegir foto */
+.pick{margin-top:22px;width:100%;border:0;border-radius:18px;background:var(--blue);color:#fff;
+  padding:34px 20px;display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center}
+.pick svg{width:52px;height:52px}
+.pick strong{font-size:1.3rem;font-weight:700}
+.pick span{font-size:.95rem;color:#fff;opacity:.92}
+
+/* Vista previa en papel */
+.preview{margin-top:20px}
+.stripwrap{display:flex;justify-content:center;background:var(--track);border-radius:18px;padding:20px 16px 28px}
+.strip{width:100%;max-width:280px;background:#fff;padding:12px 0 18px;box-shadow:0 10px 24px rgba(10,34,64,.18);
+  -webkit-mask:linear-gradient(#000 0 0) top/100% calc(100% - 8px) no-repeat,conic-gradient(from -45deg at bottom,#0000,#000 1deg 89deg,#0000 90deg) bottom/12px 8px repeat-x;
+          mask:linear-gradient(#000 0 0) top/100% calc(100% - 8px) no-repeat,conic-gradient(from -45deg at bottom,#0000,#000 1deg 89deg,#0000 90deg) bottom/12px 8px repeat-x}
+.strip canvas{display:block;width:100%;height:auto;image-rendering:pixelated;max-height:62vh;object-fit:contain;object-position:top}
+.tools{display:flex;justify-content:center;gap:10px;margin-top:12px;flex-wrap:wrap}
+.link{background:transparent;border:1.5px solid var(--line);border-radius:999px;padding:9px 16px;font-weight:600;color:var(--text);min-height:44px}
+.thumbs{display:flex;gap:8px;overflow-x:auto;padding:12px 0 0}
+.thumb{flex:none;width:58px;height:58px;border-radius:10px;overflow:hidden;border:3px solid transparent;padding:0;background:var(--surface)}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb[aria-current="true"]{border-color:var(--blue)}
+.note{margin-top:10px;text-align:center;font-size:.92rem;color:var(--text2)}
+
+.msg{margin-top:16px;padding:12px 14px;border-radius:12px;background:var(--surface);border-left:5px solid var(--err);font-size:.97rem}
 .msg.ok{border-color:var(--ok)}
 .msg[hidden]{display:none}
 
-/* Selector de imágenes */
-.pick{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
-  width:100%;min-height:96px;border:2px dashed var(--line);border-radius:14px;background:transparent;padding:16px;text-align:center}
-.pick strong{font-size:1.05rem;color:var(--accent)}
-.thumbs{display:flex;gap:8px;overflow-x:auto;padding:10px 0 2px}
-.thumb{position:relative;flex:none;width:64px;height:64px;border-radius:8px;overflow:hidden;border:2px solid transparent;background:var(--surface);padding:0}
-.thumb img{width:100%;height:100%;object-fit:cover;display:block}
-.thumb[aria-current="true"]{border-color:var(--accent)}
-.thumb .x{position:absolute;top:2px;right:2px;width:22px;height:22px;border-radius:50%;border:0;background:rgba(0,0,0,.6);color:#fff;font-size:14px;line-height:22px;padding:0}
+/* Ajustes de impresora */
+details{margin-top:34px;border-top:1px solid var(--line);padding-top:6px}
+summary{font-weight:600;min-height:48px;display:flex;align-items:center;cursor:pointer;color:var(--text2)}
+.set{margin-top:10px}
+.set label{display:block;font-weight:600;margin-bottom:6px}
+.set select{width:100%;padding:11px 12px;border-radius:10px;border:1px solid var(--line);background:var(--surface);min-height:46px}
+.check{display:flex;gap:10px;align-items:center;min-height:46px;font-weight:500}
+.check input{width:22px;height:22px;accent-color:var(--blue)}
+.row{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+.log{margin-top:12px;max-height:160px;overflow:auto;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:8px 10px;font-size:.8rem;white-space:pre-wrap;word-break:break-word;color:var(--text2)}
 
-/* Vista previa: tira de papel térmico */
-.stripwrap{margin-top:12px;display:flex;justify-content:center;background:var(--track);border-radius:14px;padding:18px 14px 26px;overflow:hidden}
-.strip{position:relative;width:100%;max-width:300px;background:var(--paper);padding:10px 0 18px;
-  box-shadow:0 10px 24px rgba(10,20,30,.18);
-  -webkit-mask:linear-gradient(#000 0 0) top/100% calc(100% - 8px) no-repeat,
-    conic-gradient(from -45deg at bottom,#0000,#000 1deg 89deg,#0000 90deg) bottom/12px 8px repeat-x;
-          mask:linear-gradient(#000 0 0) top/100% calc(100% - 8px) no-repeat,
-    conic-gradient(from -45deg at bottom,#0000,#000 1deg 89deg,#0000 90deg) bottom/12px 8px repeat-x}
-.strip canvas{display:block;width:100%;height:auto;image-rendering:pixelated;max-height:70vh;object-fit:contain;object-position:top}
-.strip .empty{color:#6b7682;font-size:.92rem;text-align:center;padding:40px 16px}
-.meta{margin-top:8px;text-align:center}
-
-/* Controles */
-.seg{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:4px}
-.seg input{position:absolute;opacity:0;pointer-events:none}
-.seg label{display:flex;flex-direction:column;align-items:center;padding:8px 4px;border-radius:9px;cursor:pointer;font-weight:700}
-.seg label small{font-weight:400;color:var(--muted);font-size:.8rem}
-.seg input:checked+label{background:var(--accent);color:var(--accent-ink)}
-.seg input:checked+label small{color:inherit;opacity:.85}
-.seg input:focus-visible+label{outline:3px solid var(--accent);outline-offset:2px}
-.field{margin-top:14px}
-.field>label,.lbl{display:flex;justify-content:space-between;font-weight:700;margin-bottom:6px}
-.field output{font-weight:400;color:var(--muted)}
-select{width:100%;padding:11px 12px;border-radius:10px;border:1px solid var(--line);background:var(--surface);min-height:44px}
-input[type=range]{width:100%;accent-color:var(--accent);height:28px}
-.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-.check{display:flex;gap:10px;align-items:center;min-height:44px}
-.check input{width:22px;height:22px;accent-color:var(--accent)}
-.stepper{display:flex;align-items:center;border:1px solid var(--line);border-radius:10px;background:var(--surface);overflow:hidden}
-.stepper button{border:0;background:transparent;width:44px;height:44px;font-size:1.3rem;color:var(--accent)}
-.stepper span{min-width:34px;text-align:center;font-weight:700}
-
-details{margin-top:22px;border-top:1px solid var(--line);padding-top:12px}
-summary{font-weight:700;cursor:pointer;min-height:44px;display:flex;align-items:center}
-.log{margin-top:10px;max-height:180px;overflow:auto;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:8px 10px;
-  font-size:.82rem;white-space:pre-wrap;word-break:break-word;color:var(--muted)}
-
-/* Barra de impresión */
+/* Botón principal */
 .bar{position:fixed;left:0;right:0;bottom:0;background:var(--surface);border-top:1px solid var(--line);
-  padding:12px 16px calc(12px + env(safe-area-inset-bottom,0px))}
-.bar .in{max-width:560px;margin:0 auto}
-.bar .btn{width:100%;font-size:1.1rem;min-height:52px}
+  padding:12px 20px calc(12px + env(safe-area-inset-bottom,0px))}
+.bar .in{max-width:520px;margin:0 auto}
+.go{width:100%;border:0;border-radius:16px;background:var(--btn);color:var(--btn-ink);font-weight:700;font-size:1.2rem;min-height:60px}
+.go.stop{background:var(--navy);color:#fff}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .go.stop{background:#fff;color:var(--navy)}}
+:root[data-theme="dark"] .go.stop{background:#fff;color:var(--navy)}
+.go:disabled{opacity:.5}
 .prog{height:6px;border-radius:3px;background:var(--track);overflow:hidden;margin-bottom:10px}
 .prog[hidden]{display:none}
-.prog i{display:block;height:100%;width:0;background:var(--accent);transition:width .15s}
+.prog i{display:block;height:100%;width:0;background:var(--blue);transition:width .15s}
 @media (prefers-reduced-motion:reduce){.prog i{transition:none}}
 </style>
 </head>
 <body>
-<main>
-  <h1>Imprimir en Bixolon</h1>
-  <p class="muted">Fotos e imágenes a impresoras Bixolon por Bluetooth, desde Chrome en Android.</p>
+<header><div class="in">
+  <img src="data:image/png;base64,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" alt="Amigos for Christ">
+  <div class="chip" id="chip" data-s="off" role="status"><i></i><span id="chipTxt">Sin impresora</span></div>
+</div></header>
 
-  <div class="conn" id="conn" data-s="off">
-    <span class="dot" aria-hidden="true"></span>
-    <div class="txt"><strong id="connTitle">Sin impresora</strong><span class="muted" id="connSub">Empareja la impresora en Ajustes &gt; Bluetooth y luego conéctala aquí.</span></div>
-    <button class="btn" id="btnConn">Conectar</button>
-  </div>
+<main>
+  <h1 id="title">Imprime una foto</h1>
+  <p class="sub" id="subtitle">Elige la foto y toca Imprimir. La app la ajusta sola.</p>
+
+  <input type="file" id="file" accept="image/*" multiple hidden>
+  <button class="pick" id="btnPick">
+    <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="9" width="38" height="30" rx="5"/><circle cx="17" cy="20" r="4"/><path d="M5 34l11-10 9 8 6-5 12 10"/></svg>
+    <strong>Elegir foto</strong>
+    <span>De la galería, la cámara o WhatsApp</span>
+  </button>
+
+  <section class="preview" id="preview" hidden>
+    <div class="stripwrap"><div class="strip" id="strip"></div></div>
+    <div class="thumbs" id="thumbs" hidden></div>
+    <p class="note" id="note"></p>
+    <div class="tools">
+      <button class="link" id="btnOther">Cambiar foto</button>
+      <button class="link" id="btnRot">Girar</button>
+    </div>
+  </section>
+
   <div class="msg" id="msg" hidden role="status"></div>
 
-  <section>
-    <input type="file" id="file" accept="image/*" multiple hidden>
-    <button class="pick" id="btnPick"><strong>Elegir imágenes</strong><span class="muted">Desde la galería, la cámara o tus archivos</span></button>
-    <div class="thumbs" id="thumbs" aria-label="Imágenes elegidas"></div>
-    <div class="stripwrap"><div class="strip" id="strip"><div class="empty">Aquí verás cómo saldrá impreso, punto por punto.</div></div></div>
-    <p class="meta muted" id="meta"></p>
-  </section>
-
-  <section>
-    <h2>Papel</h2>
-    <div class="seg" role="radiogroup" aria-label="Ancho del papel">
-      <input type="radio" name="paper" id="p58" value="58"><label for="p58">58 mm<small>2 pulgadas</small></label>
-      <input type="radio" name="paper" id="p80" value="80"><label for="p80">80 mm<small>3 pulgadas</small></label>
-      <input type="radio" name="paper" id="p112" value="112"><label for="p112">112 mm<small>4 pulgadas</small></label>
-    </div>
-  </section>
-
-  <section>
-    <h2>Ajustes de imagen</h2>
-    <div class="field">
-      <label for="method">Tipo de imagen</label>
-      <select id="method">
-        <option value="fs">Foto con detalle</option>
-        <option value="atk">Foto clara (menos tinta)</option>
-        <option value="th">Texto, logos y códigos</option>
-      </select>
-    </div>
-    <div class="field">
-      <label for="brightness">Brillo <output id="oBright"></output></label>
-      <input type="range" id="brightness" min="-50" max="50" step="1">
-    </div>
-    <div class="field">
-      <label for="contrast">Contraste <output id="oContr"></output></label>
-      <input type="range" id="contrast" min="-50" max="50" step="1">
-    </div>
-    <div class="field">
-      <label for="sharpen">Nitidez <output id="oSharp"></output></label>
-      <input type="range" id="sharpen" min="0" max="100" step="5">
-    </div>
-    <div class="field row">
-      <button class="btn ghost" id="btnRot">Girar 90°</button>
-      <label class="check"><input type="checkbox" id="invert"> Invertir colores</label>
-    </div>
-    <div class="field row" style="justify-content:space-between">
-      <span class="lbl" style="margin:0">Copias</span>
-      <div class="stepper"><button id="cMinus" aria-label="Menos copias">−</button><span id="cVal">1</span><button id="cPlus" aria-label="Más copias">+</button></div>
-    </div>
-  </section>
-
   <details>
-    <summary>Si la impresión sale mal</summary>
-    <p class="muted">Primero imprime la prueba. Si sale el texto pero no la imagen, cambia a modo compatible. Si los bordes salen cortados, elige un papel más angosto. Si se corta a medias, usa velocidad lenta.</p>
-    <div class="field">
-      <label for="mode">Forma de enviar la imagen</label>
-      <select id="mode">
-        <option value="gsv0">Normal (recomendado)</option>
-        <option value="esc">Compatible, para modelos antiguos</option>
+    <summary>Ajustes de la impresora</summary>
+    <div class="set">
+      <label for="paper">Ancho del papel</label>
+      <select id="paper">
+        <option value="58">58 mm (2") — SPP-R200, R210, R220</option>
+        <option value="80">80 mm (3") — SPP-R300, R310</option>
+        <option value="112">112 mm (4") — SPP-R400, R410</option>
       </select>
     </div>
-    <div class="field">
-      <label for="speed">Velocidad de envío</label>
-      <select id="speed">
-        <option value="fast">Rápida</option>
-        <option value="normal">Normal</option>
-        <option value="slow">Lenta, si se corta o se traba</option>
-      </select>
-    </div>
-    <div class="field">
-      <label for="feed">Papel extra al final <output id="oFeed"></output></label>
-      <input type="range" id="feed" min="0" max="10" step="1">
-    </div>
-    <label class="check"><input type="checkbox" id="cut"> Cortar papel (solo impresoras con cortador)</label>
-    <div class="row" style="margin-top:10px">
-      <button class="btn ghost" id="btnTest">Imprimir prueba</button>
-      <button class="btn plain" id="btnDisc">Desconectar</button>
+    <label class="check"><input type="checkbox" id="compat"> Modo compatible (si la foto no sale)</label>
+    <label class="check"><input type="checkbox" id="slow"> Envío lento (si la impresión se corta)</label>
+    <div class="row">
+      <button class="link" id="btnTest">Imprimir prueba</button>
+      <button class="link" id="btnConn">Cambiar impresora</button>
+      <button class="link" id="btnDisc">Desconectar</button>
     </div>
     <div class="log" id="log" aria-live="polite"></div>
   </details>
@@ -214,7 +160,7 @@ summary{font-weight:700;cursor:pointer;min-height:44px;display:flex;align-items:
 
 <div class="bar"><div class="in">
   <div class="prog" id="prog" hidden><i id="progBar"></i></div>
-  <button class="btn" id="btnPrint" disabled>Imprimir</button>
+  <button class="go" id="go">Elegir foto</button>
 </div></div>
 
 <script>
@@ -223,64 +169,50 @@ summary{font-weight:700;cursor:pointer;min-height:44px;display:flex;align-items:
 const $ = s => document.querySelector(s);
 const SPP = '00001101-0000-1000-8000-00805f9b34fb';
 const DOTS = { '58': 384, '80': 576, '112': 832 };
-const SPEED = { fast: [1024, 0], normal: [512, 15], slow: [128, 40] };
-const DEF = { paper:'58', method:'fs', brightness:10, contrast:10, sharpen:60, rotate:0, invert:false, copies:1, mode:'gsv0', speed:'normal', feed:4, cut:false };
-const KEY = 'bixolon-print-v1';
+const KEY = 'amigos-bixolon-v1';
+const DEF = { paper: '58', compat: false, slow: false };
 
 let S = Object.assign({}, DEF);
 try { Object.assign(S, JSON.parse(localStorage.getItem(KEY) || '{}')); } catch (e) {}
 const save = () => { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} };
 
-let port = null, writer = null, busy = false, cancelled = false;
+let port = null, writer = null, busy = false, cancelled = false, printedOnce = false;
 let items = [], sel = 0;
 
-/* ---------- Registro y mensajes ---------- */
-function log(t) {
-  const el = $('#log'), time = new Date().toLocaleTimeString();
-  el.textContent = `[${time}] ${t}\n` + el.textContent;
-}
+/* ---------- Mensajes ---------- */
+function log(t) { const el = $('#log'); el.textContent = `[${new Date().toLocaleTimeString()}] ${t}\n` + el.textContent; }
 function msg(text, ok) {
   const m = $('#msg');
   if (!text) { m.hidden = true; return; }
   m.textContent = text; m.className = 'msg' + (ok ? ' ok' : ''); m.hidden = false;
 }
-function setConn(state, title, sub) {
-  $('#conn').dataset.s = state;
-  $('#connTitle').textContent = title;
-  $('#connSub').textContent = sub;
-  $('#btnConn').textContent = state === 'ok' ? 'Cambiar' : 'Conectar';
-  updatePrintBtn();
+function chip(state, text) { $('#chip').dataset.s = state; $('#chipTxt').textContent = text; }
+function diag() {
+  const ua = navigator.userAgent;
+  return `Chrome ${(ua.match(/Chrome\/(\d+)/) || [])[1] || '?'}, Android ${(ua.match(/Android ([\d.]+)/) || [])[1] || '?'}`;
 }
 
-/* ---------- Conexión Bluetooth (Web Serial sobre RFCOMM/SPP) ---------- */
-async function openPort(p) {
-  setConn('busy', 'Conectando…', 'Espera unos segundos.');
-  try {
-    await p.open({ baudRate: 115200 });
-  } catch (e) {
-    log('Error al abrir: ' + e.name + ' ' + e.message);
-    setConn('off', 'No se pudo conectar', 'Revisa que esté encendida y cerca.');
-    msg('No se pudo abrir la conexión. Revisa que la impresora esté encendida, cerca, y que no esté conectada a otro teléfono o a la app mPrint (ciérrala por completo).');
+/* ---------- Conexión Bluetooth ---------- */
+async function openPort(p, quiet) {
+  chip('busy', 'Conectando…');
+  try { await p.open({ baudRate: 115200 }); }
+  catch (e) {
+    log('Abrir: ' + e.name + ' ' + e.message);
+    chip('off', 'Sin impresora');
+    if (!quiet) msg('No se pudo conectar. Revisa que la impresora esté encendida y cerca, y que mPrint esté cerrada.');
     return false;
   }
   port = p; writer = p.writable.getWriter();
-  const info = p.getInfo ? p.getInfo() : {};
-  log('Conectada. ' + JSON.stringify(info));
-  setConn('ok', 'Impresora conectada', 'Lista para imprimir.');
-  msg('');
+  chip('ok', 'Impresora lista'); msg(''); log('Conectada.');
+  render();
   return true;
 }
 
-let searchLevel = 0; // 0: solo impresoras (puerto serie), 1: todos los emparejados
-function diag() {
-  const ua = navigator.userAgent;
-  const c = (ua.match(/Chrome\/(\d+)/) || [])[1] || '?', a = (ua.match(/Android ([\d.]+)/) || [])[1] || '?';
-  return `Chrome ${c}, Android ${a}`;
-}
+let searchLevel = 0;
 async function connect() {
   if (!('serial' in navigator)) {
-    msg('Este navegador no puede usar impresoras Bluetooth. Abre esta página en Google Chrome para Android, versión 137 o más reciente. (' + diag() + ')');
-    return;
+    msg('Abre esta app en Google Chrome para Android (versión 137 o más nueva). En iPhone no se puede imprimir por Bluetooth. (' + diag() + ')');
+    return false;
   }
   await disconnect(true);
   const opts = searchLevel === 0
@@ -289,50 +221,44 @@ async function connect() {
   const t0 = Date.now();
   try {
     const p = await navigator.serial.requestPort(opts);
-    await openPort(p);
+    return await openPort(p);
   } catch (e) {
-    const fast = Date.now() - t0 < 1500;   // la lista ni siquiera llegó a mostrarse
+    const fast = Date.now() - t0 < 1500;
     log(`Búsqueda ${searchLevel ? 'amplia' : 'normal'}: ${e.name} ${e.message} (${diag()})`);
-    setConn('off', 'Sin impresora', 'Toca Conectar para elegirla.');
+    chip('off', 'Sin impresora');
     if (e.name === 'NotFoundError' && fast && searchLevel === 0) {
       searchLevel = 1;
-      $('#btnConn').textContent = 'Buscar todas';
-      msg('Chrome no mostró ninguna impresora con la búsqueda normal. Toca "Buscar todas" para ver todos los dispositivos emparejados.');
+      msg('No apareció la impresora. Toca el botón otra vez para buscar en todos los dispositivos.');
     } else if (e.name === 'NotFoundError' && fast) {
-      msg('Chrome no encontró dispositivos Bluetooth. Ve a Ajustes > Apps > Chrome > Permisos > Dispositivos cercanos y elige Permitir. Después cierra Chrome por completo y vuelve a abrir la app. (' + diag() + ')');
+      msg('Chrome no ve dispositivos Bluetooth. Ve a Ajustes > Apps > Chrome > Permisos > Dispositivos cercanos > Permitir, y vuelve a abrir la app.');
     } else if (e.name === 'NotFoundError') {
-      msg('No se eligió ninguna impresora. Si no aparece en la lista, emparéjala primero en Ajustes > Bluetooth del teléfono (la clave suele ser 0000).');
+      msg('No elegiste impresora. Si no está en la lista, emparéjala primero en Ajustes > Bluetooth (clave 0000).');
     } else if (e.name === 'SecurityError' || e.name === 'NotAllowedError') {
-      msg('Chrome no tiene permiso para usar Bluetooth. Ve a Ajustes > Apps > Chrome > Permisos > Dispositivos cercanos y elige Permitir. Si abriste el enlace dentro de otra app, ábrelo directo en Chrome. (' + diag() + ')');
+      msg('Chrome no tiene permiso de Bluetooth. Ve a Ajustes > Apps > Chrome > Permisos > Dispositivos cercanos > Permitir.');
     } else {
-      msg('No se pudo buscar impresoras: ' + e.name + ' ' + e.message + ' (' + diag() + ')');
+      msg('No se pudo buscar la impresora: ' + e.message);
     }
+    return false;
   }
 }
 
 async function disconnect(quiet) {
-  try { if (writer) { writer.releaseLock(); } } catch (e) {}
-  try { if (port) { await port.close(); } } catch (e) {}
+  try { if (writer) writer.releaseLock(); } catch (e) {}
+  try { if (port) await port.close(); } catch (e) {}
   writer = null; port = null;
-  if (!quiet) { setConn('off', 'Sin impresora', 'Toca Conectar para elegirla.'); log('Desconectada.'); }
+  if (!quiet) { chip('off', 'Sin impresora'); log('Desconectada.'); render(); }
 }
 
-async function tryReconnect() {
-  if (!('serial' in navigator)) {
-    setConn('off', 'Navegador no compatible', 'Usa Google Chrome 137 o más reciente en Android.');
-    return;
-  }
+async function autoReconnect() {
+  if (!('serial' in navigator)) return;
   try {
     const ports = await navigator.serial.getPorts();
-    if (ports.length) {
-      setConn('off', 'Impresora anterior encontrada', 'Toca Conectar para volver a usarla.');
-      $('#btnConn').textContent = 'Reconectar';
-      $('#btnConn').dataset.prev = '1';
-    }
-  } catch (e) {}
+    if (ports.length) await openPort(ports[0], true);
+  } catch (e) { log('Reconexión: ' + e.message); }
+  render();
 }
 
-/* ---------- Envío de datos ---------- */
+/* ---------- Envío ---------- */
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 function concat(parts) {
   let n = 0; for (const p of parts) n += p.length;
@@ -341,7 +267,7 @@ function concat(parts) {
   return out;
 }
 async function send(bytes, onProgress) {
-  const [chunk, delay] = SPEED[S.speed] || SPEED.normal;
+  const chunk = S.slow ? 128 : 512, delay = S.slow ? 40 : 15;
   for (let i = 0; i < bytes.length; i += chunk) {
     if (cancelled) throw new Error('cancelado');
     await writer.ready;
@@ -351,26 +277,7 @@ async function send(bytes, onProgress) {
   }
 }
 
-/* ---------- Procesamiento de imagen ---------- */
-function rasterize(src, width) {
-  const W = width || DOTS[S.paper];
-  const r = ((S.rotate % 360) + 360) % 360;
-  const sw = src.naturalWidth || src.width, sh = src.naturalHeight || src.height;
-  const side = r % 180 ? sh : sw, other = r % 180 ? sw : sh;
-  const scale = W / side;
-  const H = Math.max(1, Math.min(30000, Math.round(other * scale)));
-  const tw = Math.max(1, Math.round(sw * scale)), th = Math.max(1, Math.round(sh * scale));
-  const pre = prescale(src, sw, sh, tw, th);
-  const c = document.createElement('canvas'); c.width = W; c.height = H;
-  const g = c.getContext('2d', { willReadFrequently: true });
-  g.fillStyle = '#fff'; g.fillRect(0, 0, W, H);           // fondo blanco: evita que lo transparente salga negro
-  g.imageSmoothingEnabled = true; g.imageSmoothingQuality = 'high';
-  g.translate(W / 2, H / 2); g.rotate(r * Math.PI / 180);
-  g.drawImage(pre, -tw / 2, -th / 2, tw, th);
-  return toBits(g.getImageData(0, 0, W, H).data, W, H);
-}
-
-// Reduce la foto a la mitad varias veces antes del tamaño final: una sola reducción grande deja la imagen borrosa.
+/* ---------- Procesamiento automático de imagen ---------- */
 function prescale(src, sw, sh, tw, th) {
   const key = tw + 'x' + th;
   if (src._pre && src._pre.key === key) return src._pre.canvas;
@@ -386,15 +293,29 @@ function prescale(src, sw, sh, tw, th) {
   return img;
 }
 
-// Desenfoque suave (1-2-1) usado para dar nitidez con máscara de enfoque.
+function rasterize(it, width) {
+  const src = it.img, W = width || DOTS[S.paper];
+  const r = ((it.rotate || 0) % 360 + 360) % 360;
+  const sw = src.naturalWidth || src.width, sh = src.naturalHeight || src.height;
+  const side = r % 180 ? sh : sw, other = r % 180 ? sw : sh;
+  const scale = W / side;
+  const H = Math.max(1, Math.min(30000, Math.round(other * scale)));
+  const tw = Math.max(1, Math.round(sw * scale)), th = Math.max(1, Math.round(sh * scale));
+  const pre = prescale(src, sw, sh, tw, th);
+  const c = document.createElement('canvas'); c.width = W; c.height = H;
+  const g = c.getContext('2d', { willReadFrequently: true });
+  g.fillStyle = '#fff'; g.fillRect(0, 0, W, H);
+  g.imageSmoothingEnabled = true; g.imageSmoothingQuality = 'high';
+  g.translate(W / 2, H / 2); g.rotate(r * Math.PI / 180);
+  g.drawImage(pre, -tw / 2, -th / 2, tw, th);
+  return toBits(g.getImageData(0, 0, W, H).data, W, H);
+}
+
 function blur121(a, W, H) {
   const t = new Float32Array(a.length), o = new Float32Array(a.length);
   for (let y = 0; y < H; y++) {
     const r = y * W;
-    for (let x = 0; x < W; x++) {
-      const l = a[r + (x > 0 ? x - 1 : x)], c = a[r + x], d = a[r + (x < W - 1 ? x + 1 : x)];
-      t[r + x] = (l + 2 * c + d) / 4;
-    }
+    for (let x = 0; x < W; x++) t[r + x] = (a[r + (x > 0 ? x - 1 : x)] + 2 * a[r + x] + a[r + (x < W - 1 ? x + 1 : x)]) / 4;
   }
   for (let y = 0; y < H; y++) {
     const u = (y > 0 ? y - 1 : y) * W, c = y * W, d = (y < H - 1 ? y + 1 : y) * W;
@@ -403,46 +324,56 @@ function blur121(a, W, H) {
   return o;
 }
 
+function otsu(hist, N) {
+  let sum = 0; for (let i = 0; i < 256; i++) sum += i * hist[i];
+  let sumB = 0, wB = 0, best = 0, t = 128;
+  for (let i = 0; i < 256; i++) {
+    wB += hist[i]; if (!wB) continue;
+    const wF = N - wB; if (!wF) break;
+    sumB += i * hist[i];
+    const mB = sumB / wB, mF = (sum - sumB) / wF, v = wB * wF * (mB - mF) * (mB - mF);
+    if (v > best) { best = v; t = i; }
+  }
+  return t;
+}
+
+// Decide sola si es foto o texto/logo y aplica el mejor ajuste: nadie tiene que mover nada.
 function toBits(d, W, H) {
-  const N = W * H, gray = new Float32Array(N);
+  const N = W * H, gray = new Float32Array(N), hist = new Uint32Array(256);
   for (let i = 0, j = 0; i < N; i++, j += 4) {
     let v = 0.299 * d[j] + 0.587 * d[j + 1] + 0.114 * d[j + 2];
-    if (d[j + 3] < 255) v = 255 - (255 - v) * d[j + 3] / 255;
-    gray[i] = v;
+    if (d[j + 3] < 255) v = 255 - (255 - v) * d[j + 3] / 255;   // lo transparente se vuelve blanco
+    gray[i] = v; hist[v | 0]++;
   }
-  // Nitidez: realza bordes y detalles antes de pasar a puntos blanco y negro
-  const amt = (S.sharpen || 0) / 100 * 1.8;
-  if (amt > 0) {
-    const bl = blur121(gray, W, H);
-    for (let i = 0; i < N; i++) gray[i] += amt * (gray[i] - bl[i]);
-  }
-  // El papel térmico oscurece los tonos medios; la corrección gamma los aclara para que la foto no salga empastada
-  const cc = S.contrast * 2.55, f = (259 * (cc + 255)) / (255 * (259 - cc)), b = S.brightness * 2.55;
-  const gam = S.method === 'th' ? 1 : 1 / 1.2;
-  for (let i = 0; i < N; i++) {
-    let v = f * (gray[i] - 128) + 128 + b;
-    v = v < 0 ? 0 : v > 255 ? 255 : v;
-    if (gam !== 1) v = 255 * Math.pow(v / 255, gam);
-    if (S.invert) v = 255 - v;
-    gray[i] = v;
-  }
+  let mid = 0; for (let v = 48; v < 208; v++) mid += hist[v];
+  const graphic = mid / N < 0.15;
   const bits = new Uint8Array(N);
-  const add = (x, y, e) => { if (x >= 0 && x < W && y < H) gray[y * W + x] += e; };
-  for (let y = 0; y < H; y++) {
-    for (let x = 0; x < W; x++) {
-      const i = y * W + x, old = gray[i], nw = old < 128 ? 0 : 255;
-      bits[i] = nw === 0 ? 1 : 0;
-      if (S.method === 'th') continue;
-      const e = old - nw;
-      if (S.method === 'fs') {
-        add(x + 1, y, e * 7 / 16); add(x - 1, y + 1, e * 3 / 16); add(x, y + 1, e * 5 / 16); add(x + 1, y + 1, e / 16);
-      } else {
-        const a = e / 8;
-        add(x + 1, y, a); add(x + 2, y, a); add(x - 1, y + 1, a); add(x, y + 1, a); add(x + 1, y + 1, a); add(x, y + 2, a);
-      }
-    }
+
+  if (graphic) {
+    // Texto, logos, códigos QR: blanco y negro puro, bordes limpios
+    const t = Math.min(200, Math.max(70, otsu(hist, N)));
+    for (let i = 0; i < N; i++) bits[i] = gray[i] < t ? 1 : 0;
+    return { W, H, bits, kind: 'texto' };
   }
-  return { W, H, bits };
+
+  // Foto: niveles automáticos, nitidez, aclarado de tonos medios y tramado limpio
+  const pct = p => { let acc = 0; const tgt = N * p; for (let v = 0; v < 256; v++) { acc += hist[v]; if (acc >= tgt) return v; } return 255; };
+  const lo = pct(0.01), hi = Math.max(pct(0.99), lo + 40), k = 255 / (hi - lo);
+  const bl = blur121(gray, W, H);
+  for (let i = 0; i < N; i++) {
+    let v = gray[i] + 1.1 * (gray[i] - bl[i]);
+    v = (v - lo) * k;
+    v = v < 0 ? 0 : v > 255 ? 255 : v;
+    gray[i] = 255 * Math.pow(v / 255, 0.8);
+  }
+  const add = (x, y, e) => { if (x >= 0 && x < W && y < H) gray[y * W + x] += e; };
+  for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
+    const i = y * W + x, old = gray[i], nw = old < 128 ? 0 : 255;
+    bits[i] = nw ? 0 : 1;
+    const a = (old - nw) / 8;
+    add(x + 1, y, a); add(x + 2, y, a); add(x - 1, y + 1, a); add(x, y + 1, a); add(x + 1, y + 1, a); add(x, y + 2, a);
+  }
+  return { W, H, bits, kind: 'foto' };
 }
 
 /* ---------- Comandos ESC/POS ---------- */
@@ -468,12 +399,10 @@ function rasterEscStar(R) {
   for (let y0 = 0; y0 < R.H; y0 += 24) {
     const buf = new Uint8Array(5 + n * 3 + 1);
     buf.set([0x1B, 0x2A, 33, n & 255, n >> 8]);
-    for (let x = 0; x < n; x++) {
-      for (let k = 0; k < 3; k++) {
-        let v = 0;
-        for (let b = 0; b < 8; b++) { const y = y0 + k * 8 + b; if (y < R.H && R.bits[y * R.W + x]) v |= 0x80 >> b; }
-        buf[5 + x * 3 + k] = v;
-      }
+    for (let x = 0; x < n; x++) for (let k = 0; k < 3; k++) {
+      let v = 0;
+      for (let b = 0; b < 8; b++) { const y = y0 + k * 8 + b; if (y < R.H && R.bits[y * R.W + x]) v |= 0x80 >> b; }
+      buf[5 + x * 3 + k] = v;
     }
     buf[buf.length - 1] = 0x0A;
     parts.push(buf);
@@ -484,168 +413,142 @@ function rasterEscStar(R) {
 function job(R, extra) {
   const parts = [new Uint8Array([0x1B, 0x40])];
   if (extra) parts.push(extra);
-  parts.push(...(S.mode === 'esc' ? rasterEscStar(R) : rasterGSv0(R)));
-  if (S.feed) parts.push(new Uint8Array([0x1B, 0x64, S.feed]));
-  if (S.cut) parts.push(new Uint8Array([0x1D, 0x56, 0x42, 0x00]));
+  parts.push(...(S.compat ? rasterEscStar(R) : rasterGSv0(R)));
+  parts.push(new Uint8Array([0x1B, 0x64, 4]));
   return concat(parts);
 }
 
-/* ---------- Vista previa ---------- */
+/* ---------- Pantalla ---------- */
 let pending = 0;
-function preview() {
+function drawPreview() {
   cancelAnimationFrame(pending);
   pending = requestAnimationFrame(() => {
-    const strip = $('#strip');
-    if (!items.length) {
-      strip.innerHTML = '<div class="empty">Aquí verás cómo saldrá impreso, punto por punto.</div>';
-      $('#meta').textContent = ''; return;
-    }
-    const R = rasterize(items[sel].img);
-    items[sel].R = R;
+    if (!items.length) return;
+    const R = rasterize(items[sel]);
     const c = document.createElement('canvas'); c.width = R.W; c.height = R.H;
     const g = c.getContext('2d'), id = g.createImageData(R.W, R.H);
     for (let i = 0, j = 0; i < R.bits.length; i++, j += 4) {
-      const v = R.bits[i] ? 20 : 255; id.data[j] = id.data[j + 1] = id.data[j + 2] = v; id.data[j + 3] = 255;
+      const v = R.bits[i] ? 30 : 255; id.data[j] = id.data[j + 1] = id.data[j + 2] = v; id.data[j + 3] = 255;
     }
     g.putImageData(id, 0, 0);
-    c.setAttribute('aria-label', 'Vista previa de impresión');
-    strip.replaceChildren(c);
-    const cm = (R.H / 8 / 10).toFixed(1);
-    $('#meta').textContent = `${R.W} × ${R.H} puntos, unos ${cm} cm de papel` + (R.H >= 30000 ? '. Imagen recortada por ser muy larga.' : '');
+    c.setAttribute('role', 'img'); c.setAttribute('aria-label', 'Así saldrá impresa');
+    $('#strip').replaceChildren(c);
+    const cm = (R.H / 80).toFixed(1);
+    $('#note').textContent = (R.kind === 'foto' ? 'Ajustada como foto' : 'Ajustada como texto o logo') + `. Usará unos ${cm} cm de papel.`;
   });
 }
 
 function renderThumbs() {
-  const t = $('#thumbs'); t.replaceChildren();
-  items.forEach((it, i) => {
+  const t = $('#thumbs');
+  t.hidden = items.length < 2;
+  t.replaceChildren(...items.map((it, i) => {
     const b = document.createElement('button');
-    b.className = 'thumb'; b.setAttribute('aria-current', i === sel); b.setAttribute('aria-label', 'Ver ' + it.name);
+    b.className = 'thumb'; b.setAttribute('aria-current', i === sel); b.setAttribute('aria-label', 'Ver foto ' + (i + 1));
     const im = document.createElement('img'); im.src = it.url; im.alt = '';
-    const x = document.createElement('button'); x.className = 'x'; x.textContent = '×'; x.setAttribute('aria-label', 'Quitar ' + it.name);
-    x.onclick = ev => { ev.stopPropagation(); URL.revokeObjectURL(it.url); items.splice(i, 1); sel = Math.min(sel, Math.max(0, items.length - 1)); renderThumbs(); preview(); updatePrintBtn(); };
-    b.onclick = () => { sel = i; renderThumbs(); preview(); };
-    b.append(im, x); t.append(b);
-  });
+    b.append(im); b.onclick = () => { sel = i; renderThumbs(); drawPreview(); };
+    return b;
+  }));
+}
+
+function render() {
+  const has = items.length > 0;
+  $('#btnPick').hidden = has;
+  $('#preview').hidden = !has;
+  $('#title').textContent = has ? (items.length > 1 ? `${items.length} fotos listas` : 'Foto lista') : 'Imprime una foto';
+  $('#subtitle').textContent = has ? 'Así saldrá en el papel.' : 'Elige la foto y toca Imprimir. La app la ajusta sola.';
+  const go = $('#go');
+  go.classList.toggle('stop', busy);
+  if (busy) { go.textContent = 'Cancelar'; return; }
+  if (!has) go.textContent = 'Elegir foto';
+  else if (!writer) go.textContent = 'Conectar e imprimir';
+  else go.textContent = printedOnce ? 'Imprimir otra vez' : (items.length > 1 ? `Imprimir ${items.length} fotos` : 'Imprimir');
 }
 
 async function addFiles(files) {
+  const added = [];
   for (const f of files) {
     if (!f.type.startsWith('image/')) continue;
     const url = URL.createObjectURL(f), img = new Image();
     img.src = url;
-    try { await img.decode(); items.push({ name: f.name || 'imagen', url, img }); }
-    catch (e) { URL.revokeObjectURL(url); msg(`No se pudo abrir "${f.name}". Si es una foto HEIC, compártela como JPG.`); }
+    try { await img.decode(); added.push({ url, img, rotate: 0 }); }
+    catch (e) { URL.revokeObjectURL(url); msg('No se pudo abrir esa foto. Si es de iPhone (HEIC), compártela como JPG.'); }
   }
-  sel = Math.max(0, items.length - 1);
-  renderThumbs(); preview(); updatePrintBtn();
+  if (!added.length) return;
+  items.forEach(it => URL.revokeObjectURL(it.url));
+  items = added; sel = 0; printedOnce = false; msg('');
+  renderThumbs(); render(); drawPreview();
 }
 
 /* ---------- Imprimir ---------- */
-function updatePrintBtn() {
-  const b = $('#btnPrint');
-  if (busy) { b.textContent = 'Cancelar'; b.disabled = false; return; }
-  const n = items.length * S.copies;
-  b.textContent = !items.length ? 'Imprimir' : n === 1 ? 'Imprimir 1 hoja' : `Imprimir ${n} hojas`;
-  b.disabled = !items.length || !writer;
-  $('#btnTest').disabled = !writer;
-}
-
-async function run(jobs, label) {
-  busy = true; cancelled = false; updatePrintBtn();
+async function run(jobs) {
+  busy = true; cancelled = false; render();
   const prog = $('#prog'), bar = $('#progBar'); prog.hidden = false; bar.style.width = '0';
   let lock = null; try { lock = await navigator.wakeLock?.request('screen'); } catch (e) {}
-  setConn('busy', 'Imprimiendo…', label);
+  chip('busy', 'Imprimiendo…');
+  let ok = false;
   try {
     for (let i = 0; i < jobs.length; i++) {
       const bytes = jobs[i]();
       log(`Enviando ${i + 1}/${jobs.length}: ${bytes.length} bytes`);
       await send(bytes, p => { bar.style.width = ((i + p) / jobs.length * 100) + '%'; });
     }
-    msg('Impresión enviada.', true);
-    setConn('ok', 'Impresora conectada', 'Lista para imprimir.');
+    ok = true; msg('Listo, ya se imprimió.', true);
+    chip('ok', 'Impresora lista');
   } catch (e) {
     log('Fallo: ' + e.name + ' ' + e.message);
-    if (e.message === 'cancelado') { msg('Impresión cancelada. La impresora puede terminar la línea que ya recibió.'); setConn('ok', 'Impresora conectada', 'Lista para imprimir.'); }
-    else { msg('Se perdió la conexión con la impresora. Revisa batería y distancia, y vuelve a conectar.'); await disconnect(true); setConn('off', 'Conexión perdida', 'Toca Conectar para volver a intentarlo.'); }
+    if (e.message === 'cancelado') { msg('Impresión cancelada.'); chip('ok', 'Impresora lista'); }
+    else { msg('Se perdió la conexión con la impresora. Revisa la batería y la distancia, y toca el botón otra vez.'); await disconnect(true); chip('off', 'Sin impresora'); }
   } finally {
     busy = false; prog.hidden = true; try { lock && lock.release(); } catch (e) {}
-    updatePrintBtn();
+    if (ok) printedOnce = true;
+    render();
   }
 }
 
-function printAll() {
-  const jobs = [];
-  items.forEach(it => { for (let c = 0; c < S.copies; c++) jobs.push(() => job(rasterize(it.img))); });
-  run(jobs, `${jobs.length} hoja(s)`);
+async function goPressed() {
+  if (busy) { cancelled = true; return; }
+  if (!items.length) { $('#file').click(); return; }
+  if (!writer && !(await connect())) return;
+  const list = items.slice();
+  run(list.map(it => () => job(rasterize(it))));
 }
 
 function printTest() {
-  const W = DOTS[S.paper], H = 260, c = document.createElement('canvas'); c.width = W; c.height = H;
+  const W = DOTS[S.paper], H = 240, c = document.createElement('canvas'); c.width = W; c.height = H;
   const g = c.getContext('2d');
   g.fillStyle = '#fff'; g.fillRect(0, 0, W, H);
-  g.fillStyle = '#000'; g.fillRect(0, 0, W, 4); g.fillRect(0, 0, 4, H); g.fillRect(W - 4, 0, 4, H);
-  g.font = `bold ${Math.round(W / 11)}px sans-serif`; g.fillText('Prueba Bixolon', 14, 64);
-  g.font = `${Math.round(W / 20)}px sans-serif`; g.fillText(`Papel ${S.paper} mm, ${W} puntos`, 14, 104);
+  g.fillStyle = '#000'; g.fillRect(0, 0, W, 4); g.fillRect(0, 0, 4, H); g.fillRect(W - 4, 0, 4, H); g.fillRect(0, H - 4, W, 4);
+  g.font = `bold ${Math.round(W / 11)}px sans-serif`; g.fillText('Prueba Bixolon', 14, 62);
+  g.font = `${Math.round(W / 20)}px sans-serif`; g.fillText(`Papel ${S.paper} mm`, 14, 100);
   const grad = g.createLinearGradient(14, 0, W - 14, 0); grad.addColorStop(0, '#000'); grad.addColorStop(1, '#fff');
-  g.fillStyle = grad; g.fillRect(14, 130, W - 28, 60);
-  g.fillStyle = '#000'; g.fillRect(0, H - 4, W, 4);
-  const saved = Object.assign({}, S); Object.assign(S, { rotate: 0, invert: false, method: 'fs', brightness: 0, contrast: 0, sharpen: 0 });
+  g.fillStyle = grad; g.fillRect(14, 126, W - 28, 80);
   const R = toBits(g.getImageData(0, 0, W, H).data, W, H);
-  Object.assign(S, saved);
-  const txt = new TextEncoder().encode('Texto OK. Si no sale el cuadro de abajo,\ncambie a modo compatible.\n\n');
-  run([() => job(R, txt)], 'Página de prueba');
+  const txt = new TextEncoder().encode('Texto OK. Si no sale el cuadro,\nactive Modo compatible.\n\n');
+  run([() => job(R, txt)]);
 }
 
 /* ---------- Controles ---------- */
-function bind() {
-  document.querySelectorAll('input[name=paper]').forEach(r => {
-    r.checked = r.value === S.paper;
-    r.onchange = () => { S.paper = r.value; save(); preview(); };
-  });
-  const sync = () => {
-    $('#oBright').textContent = (S.brightness > 0 ? '+' : '') + S.brightness;
-    $('#oContr').textContent = (S.contrast > 0 ? '+' : '') + S.contrast;
-    $('#oFeed').textContent = S.feed + ' líneas';
-    $('#oSharp').textContent = S.sharpen + '%';
-    $('#cVal').textContent = S.copies;
-  };
-  [['method', 'value'], ['mode', 'value'], ['speed', 'value']].forEach(([id]) => {
-    const el = $('#' + id); el.value = S[id];
-    el.onchange = () => { S[id] = el.value; save(); if (id === 'method') preview(); };
-  });
-  ['brightness', 'contrast', 'sharpen', 'feed'].forEach(id => {
-    const el = $('#' + id); el.value = S[id];
-    el.oninput = () => { S[id] = +el.value; save(); sync(); if (id !== 'feed') preview(); };
-  });
-  [['invert', true], ['cut', false]].forEach(([id, prev]) => {
-    const el = $('#' + id); el.checked = !!S[id];
-    el.onchange = () => { S[id] = el.checked; save(); if (prev) preview(); };
-  });
-  $('#btnRot').onclick = () => { S.rotate = (S.rotate + 90) % 360; save(); preview(); };
-  $('#cMinus').onclick = () => { S.copies = Math.max(1, S.copies - 1); save(); sync(); updatePrintBtn(); };
-  $('#cPlus').onclick = () => { S.copies = Math.min(20, S.copies + 1); save(); sync(); updatePrintBtn(); };
-  $('#btnPick').onclick = () => $('#file').click();
-  $('#file').onchange = e => { addFiles([...e.target.files]); e.target.value = ''; };
-  document.addEventListener('paste', e => { const f = [...(e.clipboardData?.files || [])]; if (f.length) addFiles(f); });
-  $('#btnConn').onclick = async () => {
-    if (busy) return;
-    if ($('#btnConn').dataset.prev && !port) {
-      delete $('#btnConn').dataset.prev;
-      const ports = await navigator.serial.getPorts();
-      if (ports.length && await openPort(ports[0])) return;
-    }
-    connect();
-  };
-  $('#btnDisc').onclick = () => disconnect();
-  $('#btnTest').onclick = () => { if (!busy) printTest(); };
-  $('#btnPrint').onclick = () => { if (busy) { cancelled = true; } else printAll(); };
-  sync();
-}
+$('#paper').value = S.paper;
+$('#compat').checked = S.compat;
+$('#slow').checked = S.slow;
+$('#paper').onchange = e => { S.paper = e.target.value; save(); drawPreview(); };
+$('#compat').onchange = e => { S.compat = e.target.checked; save(); };
+$('#slow').onchange = e => { S.slow = e.target.checked; save(); };
+$('#btnPick').onclick = () => $('#file').click();
+$('#btnOther').onclick = () => $('#file').click();
+$('#file').onchange = e => { addFiles([...e.target.files]); e.target.value = ''; };
+$('#btnRot').onclick = () => { const it = items[sel]; if (!it) return; it.rotate = (it.rotate + 90) % 360; printedOnce = false; render(); drawPreview(); };
+$('#go').onclick = goPressed;
+$('#btnTest').onclick = async () => { if (busy) return; if (!writer && !(await connect())) return; printTest(); };
+$('#btnConn').onclick = () => { if (!busy) connect(); };
+$('#btnDisc').onclick = () => disconnect();
+document.addEventListener('paste', e => { const f = [...(e.clipboardData?.files || [])]; if (f.length) addFiles(f); });
 
-bind(); updatePrintBtn(); tryReconnect();
+render();
+autoReconnect();
 
-/* ---------- Modo sin conexión e imágenes compartidas ---------- */
-if ('serviceWorker' in navigator) {
+/* ---------- Sin internet e imágenes compartidas ---------- */
+if ('serviceWorker' in navigator && location.protocol === 'https:' && !location.hostname.endsWith('claude.ai')) {
   navigator.serviceWorker.register('./sw.js').then(() => log('Lista para usar sin internet.')).catch(e => log('Sin modo offline: ' + e.message));
 }
 (async () => {
@@ -659,7 +562,7 @@ if ('serviceWorker' in navigator) {
     }
     history.replaceState(null, '', location.pathname);
     if (files.length) addFiles(files);
-  } catch (e) { log('No se pudieron leer las imágenes compartidas: ' + e.message); }
+  } catch (e) { log('No se pudieron leer las fotos compartidas: ' + e.message); }
 })();
 })();
 </script>

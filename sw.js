@@ -1,6 +1,7 @@
 // Cambia este número cada vez que subas una versión nueva de la app.
-const VERSION = 'bixolon-v4';
+const VERSION = 'bixolon-v5';
 const ARCHIVOS = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png'];
+const FUENTES = ['https://fonts.googleapis.com', 'https://fonts.gstatic.com'];
 const abs = p => new URL(p, self.registration.scope).href;
 
 self.addEventListener('install', e => {
@@ -18,7 +19,7 @@ self.addEventListener('activate', e => {
 self.addEventListener('fetch', e => {
   const url = new URL(e.request.url);
 
-  // Imágenes enviadas desde "Compartir" de Android
+  // Fotos enviadas desde "Compartir" de Android
   if (e.request.method === 'POST' && url.pathname.endsWith('/compartir')) {
     e.respondWith((async () => {
       const datos = await e.request.formData();
@@ -35,7 +36,21 @@ self.addEventListener('fetch', e => {
     return;
   }
 
-  if (e.request.method !== 'GET' || url.origin !== location.origin) return;
+  if (e.request.method !== 'GET') return;
+
+  // Letra Raleway: se guarda la primera vez para que funcione sin internet
+  if (FUENTES.includes(url.origin)) {
+    e.respondWith((async () => {
+      const c = await caches.open(VERSION);
+      const guardada = await c.match(e.request);
+      if (guardada) return guardada;
+      try { const r = await fetch(e.request); c.put(e.request, r.clone()); return r; }
+      catch (err) { return new Response('', { status: 504 }); }
+    })());
+    return;
+  }
+
+  if (url.origin !== location.origin) return;
 
   // Primero la copia guardada (funciona sin internet); se actualiza en segundo plano.
   e.respondWith((async () => {
