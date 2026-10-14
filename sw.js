@@ -1,5 +1,5 @@
 // Cambia este número cada vez que subas una versión nueva de la app.
-const VERSION = 'bixolon-v3';
+const VERSION = 'bixolon-v4';
 const ARCHIVOS = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png'];
 const abs = p => new URL(p, self.registration.scope).href;
 
